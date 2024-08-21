@@ -6,7 +6,7 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
 
-# Calculate RSI (Relative Strength Index)
+# Calculating RSI (Relative Strength Index)
 def calculate_rsi(data, window=14):
     delta = data.diff()
     gain = (delta.where(delta > 0, 0)).rolling(window=window).mean()
@@ -15,7 +15,7 @@ def calculate_rsi(data, window=14):
     rsi = 100 - (100 / (1 + rs))
     return rsi
 
-# Calculate MACD (Moving Average Convergence Divergence)
+# MACD (Moving Average Convergence Divergence)
 def calculate_macd(data, slow=26, fast=12, signal=9):
     fast_ema = data.ewm(span=fast, adjust=False).mean()
     slow_ema = data.ewm(span=slow, adjust=False).mean()
@@ -138,21 +138,21 @@ end_date = st.date_input(
 if start_date > end_date:
     st.error("⚠️ Error: End date must be after the start date.")
 else:
-    # Initialize a dictionary to store analysis data
+    # Initializing a dictionary to store analysis data
     analysis_data = {}
 
-    # Display data for selected stocks
+    # Displaying data for selected stocks
     for symbol in tickerSymbols:
         tickerData = yf.Ticker(symbol)
         tickerDf = tickerData.history(period='1d', start=start_date, end=end_date)
         
         if not tickerDf.empty:
-            # Calculate additional indicators
+            # Calculating additional indicators
             rsi = calculate_rsi(tickerDf['Close'])
             macd, signal_line = calculate_macd(tickerDf['Close'])
             predicted_prices = predict_stock_prices(tickerDf)
             
-            # Store data for analysis
+            # Storing data for analysis
             closing_prices = tickerDf['Close']
             analysis_data[symbol] = {
                 "start_price": closing_prices.iloc[0],
@@ -172,7 +172,7 @@ else:
                 "predicted_prices": predicted_prices
             }
 
-            # Display charts side by side with titles
+            # Displaying  charts side by side with titles
             col1, col2 = st.columns(2)
             with col1:
                 st.write(f"## 📉 Closing Price of {symbol}")
